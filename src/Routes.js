@@ -7,12 +7,12 @@ import FormLogin from './Pages/auth/FormLogin';
 import FormCadastro from './Pages/auth/FormCadastro';
 
 import AgendaScreen from './Components/agenda';
-import PetScreen from './Components/pet';
+import PetScreen from './Pages/app/pet';
 import MapaScreen from './Components/mapa';
 
-import PetDetalhe from './Components/pet/PetDetalhe';
-import PetForm from './Components/pet/PetForm';
-import PetEdit from './Components/pet/PetEdit';
+import PetDetalhe from './Pages/app/pet/PetDetalhe';
+import PetForm from './Pages/app/pet/PetForm';
+import PetEditForm from './Pages/app/pet/editFormPet';
 
 const Auth = createStackNavigator(
     {
@@ -82,7 +82,7 @@ const App = createStackNavigator({
     }),
 
     EditarPet: createStackNavigator({
-        PetEdit,
+        PetEditForm,
     }, {
         defaultNavigationOptions: {
             headerTintColor: 'white',

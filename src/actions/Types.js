@@ -20,6 +20,7 @@ export const CADASTRO_PET_SUCESSO = 'cadastro_pet_sucesso';
 export const CADASTRO_EM_ANDAMENTO_PET = 'cadastro_em_andamento_pet';
 export const CADASTRO_PET_ERRO = 'cadastro_pet_erro';
 
+
 //TELA LISTAR PET
 export const LISTA_PET = 'cadastro_pet_erro';
 

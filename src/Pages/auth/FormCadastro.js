@@ -15,7 +15,7 @@ class formCadastro extends Component {
     renderBtnCadastro() {
         if (this.props.loading_cadastro) {
             return (
-                <ActivityIndicator size="large" color='#03a9f4'/>
+                <ActivityIndicator size="large" color='#03a9f4' />
             )
         }
         return (
@@ -26,9 +26,11 @@ class formCadastro extends Component {
             </Button>
         )
     }
+
+
     render() {
         return (
-            <ImageBackground style={{ flex: 1, width: null }} source={require('../../imgs/bg2.jpg')}>
+            <ImageBackground style={{ flex: 1, width: null }} source={require('../../imgs/bg.jpg')}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <View>
                         <Item rounded style={{ marginTop: 100, width: 350, marginBottom: 8 }}>
@@ -59,7 +61,7 @@ class formCadastro extends Component {
                         </Item>
                         <Text style={{ color: '#ff0000', fontSize: 18, margin: 15 }}>{this.props.erroCadastro}</Text>
                         {this.renderBtnCadastro()}
-                        
+
                     </View>
                 </View>
             </ImageBackground>

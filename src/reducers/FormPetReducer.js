@@ -10,11 +10,11 @@ import {
     CADASTRO_PET_ERRO,
     MODIFICA_DATA,
     LISTA_PET_EDIT,
-    LIMPAR_FORM_PET
+    LIMPAR_FORM_PET,
 } from '../actions/Types';
 
+
 const INITIAL_STATE = {
-    id: null,
     especie: 'Cachorro',
     genero: 'Macho',
     nomePet: '',
@@ -29,6 +29,7 @@ export default (state = INITIAL_STATE, action) => {
     console.log(action);
 
     switch (action.type) {
+
         case MODIFICA_NOME:
             return { ...state, nomePet: action.payload }
 
@@ -62,7 +63,7 @@ export default (state = INITIAL_STATE, action) => {
 
         case LISTA_PET_EDIT:
             return action.payload;
-            
+
         default:
             return state;
     }

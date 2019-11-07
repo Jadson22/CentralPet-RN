@@ -1,6 +1,5 @@
 import NavigationService from '../services/navigation';
 import firebase from 'firebase';
-import b64 from 'base-64';
 import {
     MODIFICA_EMAIL,
     MODIFICA_SENHA,
@@ -86,7 +85,7 @@ export const autenticarUsuario = ({ email, senha }) => {
                     .catch(erro => loginUsuarioErro(erro, dispatch));
             })
             .catch(function (error) {
-                // Handle Errors here.
+                // Erros aqui.
                 var errorCode = error.code;
                 var errorMessage = error.message;
             });

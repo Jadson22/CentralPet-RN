@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Picker, Text, ScrollView, Slider, Button, ActivityIndicator } from 'react-native';
-import FormRow from '../FormRow';
+import FormRow from '../../../Components/FormRow';
 import { connect } from 'react-redux';
-import { limparFormPet, editarPet, modificaNome, modificaRaça, modificaGenero, modificaEspecie, modificaPeso, modificaObs, salvarPet, modificaData } from '../../actions/AppActions';
+import { limparFormPet, modificaNome, modificaRaça, modificaGenero, modificaEspecie, modificaPeso, modificaObs, salvarPet, modificaData } from '../../../actions/AppActions';
 import { DatePicker } from 'native-base';
 
 class PetForm extends Component {
@@ -13,23 +13,12 @@ class PetForm extends Component {
         };
     };
 
-    componentDidMount(){
-        const {navigation, editarPet, limparFormPet} = this.props;
-        const {params} = navigation.state;
-        
-        if(params && params.editPet){
-            editarPet(params.editPet);
-        }else{
-            limparFormPet();
-        }
-    }
-
     _salvarPet() {
-        const { detalhePet } = this.props;
-        this.props.salvarPet({ detalhePet });
+        const { nomePet, especie, genero, raça, dataNascimento, peso, obs } = this.props;
+        this.props.salvarPet({ nomePet, especie, genero, raça, dataNascimento, peso, obs });
     }
 
-    renderBtnAcessar() {
+    renderBtnCadastrar() {
 
         if (this.props.loading_salvar) {
             return (
@@ -48,6 +37,7 @@ class PetForm extends Component {
     }
 
     render() {
+
         return (
             <ScrollView style={styles.content}>
 
@@ -87,8 +77,8 @@ class PetForm extends Component {
                 </FormRow>
 
                 <FormRow>
-                    <Text style={{fontSize:15, marginLeft:15}}>Data de nascimento:</Text>
-                    <DatePicker 
+                    <Text style={{ fontSize: 15, marginLeft: 15 }}>Data de nascimento:</Text>
+                    <DatePicker
                         minimumDate={new Date(1997, 1, 1)}
                         maximumDate={new Date(2100, 12, 31)}
                         timeZoneOffsetInMinutes={undefined}
@@ -100,9 +90,9 @@ class PetForm extends Component {
                         value={this.props.dataNascimento}
                         disabled={false}
                         onDateChange={texto => this.modificaData(texto)}
-                        
+
                     />
-                    
+
                 </FormRow>
 
                 <FormRow>
@@ -132,7 +122,7 @@ class PetForm extends Component {
                     />
                 </FormRow>
 
-                {this.renderBtnAcessar()}
+                {this.renderBtnCadastrar()}
 
             </ScrollView>
         )
@@ -160,7 +150,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 30,
         marginTop: 15,
-        marginBottom:10
+        marginBottom: 10
 
     }
 });
@@ -176,9 +166,10 @@ const mapStateToProps = state => {
             peso: state.FormPetReducer.peso,
             obs: state.FormPetReducer.obs,
             loading_salvar: state.FormPetReducer.loading_salvar,
-            dataNascimento:state.FormPetReducer.dataNascimento
+            dataNascimento: state.FormPetReducer.dataNascimento
         }
     );
 }
 
-export default connect(mapStateToProps, { limparFormPet, editarPet, modificaNome, modificaRaça, modificaGenero, modificaEspecie, modificaPeso, modificaObs, salvarPet, modificaData })(PetForm);
+
+export default connect(mapStateToProps, { limparFormPet, modificaNome, modificaRaça, modificaGenero, modificaEspecie, modificaPeso, modificaObs, salvarPet, modificaData })(PetForm);

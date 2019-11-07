@@ -1,22 +1,42 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Picker, Text, ScrollView, Slider, Button, ActivityIndicator } from 'react-native';
-import FormRow from '../FormRow';
+import FormRow from '../../../Components/FormRow';
 import { connect } from 'react-redux';
-import { editarPet, salvarPet, modificaData } from '../../actions/AppActions';
+import { limparFormPet, ListaEditPet, modificaNome, modificaRaça, modificaGenero, modificaEspecie, modificaPeso, modificaObs, modificaData } from '../../../actions/AppActions';
 import { DatePicker } from 'native-base';
+import firebase from 'firebase';
+import NavigationService from '../../../services/navigation';
 
-class PetEdit extends Component {
+class EditFormPet extends Component {
 
     static navigationOptions = () => {
         return {
-            title: 'Cadastrar Pet'
+            title: 'Editar Pet'
         };
     };
 
-    _salvarPet() {
-        const { especie, genero, nomePet, raça, peso, obs, dataNascimento} = this.props;
+    componentDidMount() {
+        const { navigation, ListaEditPet, limparFormPet } = this.props;
+        const { params } = navigation.state;
 
-        this.props.salvarPet({ especie, genero, nomePet, raça, peso, obs, dataNascimento});
+        if (params && params.editPet) {
+            ListaEditPet(params.editPet);
+        } else {
+            limparFormPet();
+        }
+    }
+
+    editarPet() {
+
+        const { editPet } = this.props.navigation.state.params;
+        const { nomePet, especie, genero, raça, dataNascimento, peso, obs } = this.props;
+        const { currentUser } = firebase.auth();
+
+        firebase
+            .database()
+            .ref('/Pet/' + currentUser.uid + '/CadastroPet/' + editPet.uid)
+            .update({ nomePet, especie, genero, raça, dataNascimento, peso, obs })
+            .then(value => NavigationService.navigate('Pet'));
     }
 
     renderBtnAcessar() {
@@ -30,7 +50,7 @@ class PetEdit extends Component {
             <View style={styles.button}>
                 <Text
                     style={{ alignSelf: 'center', alignItems: "center", color: '#ffff' }}
-                    onPress={() => { this._salvarPet() }}>
+                    onPress={() => { this.editarPet() }}>
                     Salvar
             </Text>
             </View>
@@ -44,7 +64,7 @@ class PetEdit extends Component {
                 <FormRow>
                     <Picker
                         selectedValue={this.props.especie}
-                        onValueChange={especie => this.props.editarPet(especie)
+                        onValueChange={texto => this.props.modificaEspecie(texto)
                         }>
                         <Picker.Item label="Cachorro" value="Canina" />
                         <Picker.Item label="Gato" value="Felina" />
@@ -54,7 +74,7 @@ class PetEdit extends Component {
                 <FormRow>
                     <Picker
                         selectedValue={this.props.genero}
-                        onValueChange={genero => this.props.editarPet(genero)}>
+                        onValueChange={texto => this.props.modificaGenero(texto)}>
                         <Picker.Item label="Macho" value="Macho" />
                         <Picker.Item label="Fêmea" value="Fêmea" />
                     </Picker>
@@ -64,7 +84,7 @@ class PetEdit extends Component {
                     <TextInput style={styles.input}
                         placeholder="Nome"
                         value={this.props.nomePet}
-                        onChangeText={nomePet => this.props.editarPet(nomePet)}
+                        onChangeText={texto => this.props.modificaNome(texto)}
                     />
                 </FormRow>
 
@@ -72,13 +92,13 @@ class PetEdit extends Component {
                     <TextInput style={styles.input}
                         placeholder="Raça"
                         value={this.props.raça}
-                        onChangeText={raça => this.props.editarPet(raça)}
+                        onChangeText={texto => this.props.modificaRaça(texto)}
                     />
                 </FormRow>
 
                 <FormRow>
-                    <Text style={{fontSize:15, marginLeft:15}}>Data de nascimento:</Text>
-                    <DatePicker 
+                    <Text style={{ fontSize: 15, marginLeft: 15 }}>Data de nascimento:</Text>
+                    <DatePicker
                         minimumDate={new Date(1997, 1, 1)}
                         maximumDate={new Date(2100, 12, 31)}
                         timeZoneOffsetInMinutes={undefined}
@@ -90,16 +110,33 @@ class PetEdit extends Component {
                         value={this.props.dataNascimento}
                         disabled={false}
                         onDateChange={texto => this.modificaData(texto)}
-                        
+
                     />
-                    
+
+                </FormRow>
+
+                <FormRow>
+
+                    <View style={styles.fontPeso}>
+                        <Text>Peso: {this.props.peso} Kg</Text>
+                    </View>
+
+
+                    <Slider
+                        onValueChange={texto => this.props.modificaPeso(texto)}
+                        value={this.props.peso}
+                        minimumValue={0}
+                        maximumValue={80}
+                        step={0.5}
+                        thumbTintColor={'#03a9f4'} />
+
                 </FormRow>
 
                 <FormRow>
                     <TextInput style={styles.input}
                         placeholder="OBS:"
                         value={this.props.obs}
-                        onChangeText={obs => this.props.editarPet(obs)}
+                        onChangeText={texto => this.props.modificaObs(texto)}
                         numberOfLines={3}
                         multiline={true}
                     />
@@ -133,7 +170,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 30,
         marginTop: 15,
-        marginBottom:10
+        marginBottom: 10
 
     }
 });
@@ -149,9 +186,9 @@ const mapStateToProps = state => {
             peso: state.FormPetReducer.peso,
             obs: state.FormPetReducer.obs,
             loading_salvar: state.FormPetReducer.loading_salvar,
-            dataNascimento:state.FormPetReducer.dataNascimento
+            dataNascimento: state.FormPetReducer.dataNascimento
         }
     );
 }
 
-export default connect(mapStateToProps, { editarPet, salvarPet, modificaData })(PetEdit);
+export default connect(mapStateToProps, { limparFormPet, ListaEditPet, modificaNome, modificaRaça, modificaGenero, modificaEspecie, modificaPeso, modificaObs, modificaData })(EditFormPet);

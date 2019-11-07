@@ -1,7 +1,6 @@
 import firebase from 'firebase';
 import NavigationService from '../services/navigation';
 import _ from 'lodash';
-
 import {
     MODIFICA_NOME,
     MODIFICA_RAÇA,
@@ -17,6 +16,7 @@ import {
     LISTA_PET_EDIT,
     LIMPAR_FORM_PET
 } from './Types';
+
 
 export const modificaNome = (texto) => {
     return {
@@ -67,26 +67,17 @@ export const modificaData = (texto) => {
     }
 }
 
-export const salvarPet =  ({nomePet, raça, genero, especie, peso, obs, dataNascimento})  => {
+export const salvarPet = ({ nomePet, raça, genero, especie, peso, obs, dataNascimento }) => {
 
     return dispatch => {
         dispatch({ type: CADASTRO_EM_ANDAMENTO_PET });
         const { currentUser } = firebase.auth();
-     
-        if (detalhePet.id) {
-            firebase
-                .database()
-                .ref('/Pet/' + currentUser.uid + '/CadastroPet/' + detalhePet.id)
-                .set( detalhePet )
-                .then(value => cadastraPetSucesso(dispatch));
-        } else {
-            firebase
-                .database()
-                .ref('/Pet/' + currentUser.uid + '/CadastroPet/'+1)
-                .push({nomePet, raça, genero, especie, peso, obs, dataNascimento})
-                .then(value => cadastraPetSucesso(dispatch));
-        }
-        //.catch(erro => cadastraPetErro(erro,dispatch));
+
+        firebase
+            .database()
+            .ref('/Pet/' + currentUser.uid + '/CadastroPet/')
+            .push({ nomePet, raça, genero, especie, peso, obs, dataNascimento })
+            .then(value => cadastraPetSucesso(dispatch));
     }
 }
 
@@ -117,10 +108,10 @@ export const listarPet = () => {
     }
 }
 
-export const editarPet = detalhePet => {
+export const ListaEditPet = editPet => {
     return {
         type: LISTA_PET_EDIT,
-        payload: detalhePet
+        payload: editPet
     }
 }
 

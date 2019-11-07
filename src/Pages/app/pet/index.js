@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Text, FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View } from 'react-native';
 import _ from 'lodash';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import navigate from '../../services/navigation';
-
-import PetCard from './PetCard';
+import navigate from '../../../services/navigation';
+import PetCard from '../../../Components/pet/PetCard';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
-import { listarPet } from '../../actions/AppActions';
+import { listarPet } from '../../../actions/AppActions';
 
 class Pet extends Component {
 
@@ -61,7 +60,7 @@ Pet.navigationOptions = {
 
 mapStateToProps = state => {
   const pets = _.map(state.ListaPetReducer, (val, uid) => {
-      return { ...val, uid }
+    return { ...val, uid }
   })
   return { pets }
 }
